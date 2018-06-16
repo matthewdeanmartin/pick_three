@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+nose = "*"
+pynt = "*"
+pynt-contrib = "*"
+bumpversion = "*"
+checksumdir = "*"
+prospector = "*"
+sphinx = "*"
+safety = "*"
+pbr = "*"
+semantic-version = "*"
+
+[packages]
+
+[requires]
+python_version = "3.6"

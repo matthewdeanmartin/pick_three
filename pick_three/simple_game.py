@@ -115,7 +115,6 @@ class Game(object):
                 exit()
         return i
 
-
 if __name__ == "__main__":
     game = Game()
     game.go()

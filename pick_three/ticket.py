@@ -10,6 +10,9 @@ from pick_three.digits_class import Digits
 
 @unique
 class BetType(Enum):
+    """
+    All the simple, non-combo bets
+    """
     STRAIGHT = 1
     THREE_WAY_BOX = 2
     SIX_WAY_BOX = 3
@@ -19,6 +22,9 @@ class BetType(Enum):
 
 @unique
 class ComboType(Enum):
+    """
+    The combination bets, all made of 2+ simple bets
+    """
     SIMPLE = 1
     THREE_WAY_COMBINATION = 2
     SIX_WAY_COMBINATION = 3
@@ -27,6 +33,9 @@ class ComboType(Enum):
 
 
 class Bet(object):
+    """
+    Represents a bet type and an amount. Can only represent a simple bet.
+    """
     def __init__(self, pick, bet_type, amount, chosen):
         """
 
@@ -92,10 +101,15 @@ class SheetOfTickets(object):
         self.tickets = []
 
     def add_ticket(self, ticket):
+        """
+
+        :type ticket:Ticket
+        :return:
+        """
         self.tickets.append(ticket)
 
     def resolve_tickets(self):
-        pass
+        raise NotImplementedError()
 
 
 # TODO: model splits, actual MD payoff chart
@@ -105,6 +119,10 @@ class Ticket(object):
     """
 
     def __init__(self, combo_type):
+        """
+        Can reprsent a simple or combo bet.
+        :type combo_type:
+        """
         self.state = "MD"
         self.pick = 3
         self._chosen = None
@@ -158,7 +176,7 @@ class Ticket(object):
 
     def add_bet(self, bet_type, amount):
         """
-
+        Bets added to a list. Do not manipulate that list directly.
         :type bet_type: BetType
         :type amount: int|float
         :return:
@@ -182,17 +200,26 @@ class Ticket(object):
             raise TypeError("Expected 3 bets in a 3 way.")
 
     def add_three_way_box_combo(self, amount):
+        """
+        Add the two simple bets to make a three way box combo
+        :type amount: int|float
+        :return:
+        """
         self.add_bet(BetType.THREE_WAY_BOX, amount)
         self.add_bet(BetType.STRAIGHT, amount)
 
     def add_six_way_box_combo(self, amount):
+        """
+        Add the two simple bets to make a six way box combo
+        :type amount: int|float
+        :return:
+        """
         self.add_bet(BetType.SIX_WAY_BOX, amount)
         self.add_bet(BetType.STRAIGHT, amount)
 
     def add_three_way_combo(self, amount):
         """
-
-        :type bet_type: BetType
+        Add three bets on three different numbers. Two will be losers.
         :type amount: int|float
         :return:
         """
@@ -206,6 +233,11 @@ class Ticket(object):
             raise TypeError("Expected 3 bets in a 3 way.")
 
     def chart(self, state):
+        """
+        Payoff charts, which vary by state
+        :type state: str
+        :return:
+        """
         chart = {
             BetType.STRAIGHT: 500,  # 1 in 1000
             BetType.THREE_WAY_BOX: 160,  # 3 in 1000
@@ -249,6 +281,10 @@ class Ticket(object):
         raise NotImplementedError()
 
     def price(self):
+        """
+
+        :type: int|float
+        """
         total = 0
         for bet in self.bets:
             total += bet.amount
@@ -257,6 +293,10 @@ class Ticket(object):
         return total
 
     def check_valid(self):
+        """
+        Does this Ticket have problems?
+        :rtype: bool
+        """
 
         if len(self.bets) < 1:
             raise TypeError("Need at least one bet")

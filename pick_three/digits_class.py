@@ -12,7 +12,7 @@ class Digits(object):
     """
     def __init__(self, chosen, pick):
         """
-
+        Initialize with some values that we'll need later on
         :type chosen: str, int
         :type pick: int
         """
@@ -21,12 +21,12 @@ class Digits(object):
         except:
             raise DigitsException("Chosen must be valid int")
 
-        if pick <0:
+        if pick < 0:
             raise DigitsException("Need positive digits")
-        if numeric_chosen <0:
+        if numeric_chosen < 0:
             raise DigitsException("Need positive chosen")
         if int(chosen) > pow(10, pick):
-            raise DigitsException("Chosen too big for pick, max {0}".format( pow(10,pick)))
+            raise DigitsException("Chosen too big for pick, max {0}".format(pow(10, pick)))
         if not self.in_range(numeric_chosen, pick):
             # dupe check?
             raise DigitsException("Not numeric or out of range")
@@ -36,7 +36,13 @@ class Digits(object):
         self._dist = None
 
     def in_range(self, number, pick):
-        if len(str(number).zfill(3)) != 3:
+        """
+        Verify if the number is the right length and is a number
+        :type number: int|str
+        :type pick: int
+        :rtype: bool
+        """
+        if len(str(number).zfill(pick)) != pick:
             return False
         for char in str(number):
             if char not in "0123456789":
@@ -44,6 +50,10 @@ class Digits(object):
         return True
 
     def get_dist(self):
+        """
+        Count of each digit occurance in the number
+        :return:
+        """
         if self._dist is None:
             self._dist = {}
             for char in self.chosen:
@@ -54,6 +64,10 @@ class Digits(object):
         return self._dist
 
     def has_double(self):
+        """
+        Does it have a double digit.
+        :return:
+        """
         has_double = False
         doubled = None
         for digit, count in self.get_dist().items():
@@ -63,7 +77,10 @@ class Digits(object):
         return has_double, doubled
 
     def all_different(self):
-        # what??
+        """
+        Hell if I remember what I was doing here.
+        :return:
+        """
         has_double = False
         doubled = None
         for digit, count in self.get_dist().items():
@@ -73,9 +90,17 @@ class Digits(object):
         return has_double, doubled
 
     def all_unique(self):
+        """
+        Check if all digits are unique
+        :return:
+        """
         return len(set(self.chosen)) == self.pick
 
     def six_ways(self):
+        """
+        Generate the six ways given a suitable number
+        :return:
+        """
         if not self.all_unique():
             raise DigitsException("Can't do a 6 way unless all digits different, have {0}".format(self.chosen))
 
@@ -85,8 +110,7 @@ class Digits(object):
         for char in self.chosen:
             for char2 in self.chosen:
                 for char3 in self.chosen:
-                    v = len(set([char , char2 , char3]))
-                    if len(set([char , char2 , char3])) == self.pick:
+                    if len({char, char2, char3}) == self.pick:
                         ways.add(char + char2 + char3)
 
         # ugh, I hate this.
@@ -107,6 +131,10 @@ class Digits(object):
         return [Digits(value, self.pick) for value in ways]
 
     def three_ways(self):
+        """
+        Generate the 3 ways give a suitable number.
+        :return:
+        """
         if not self.has_double():
             raise DigitsException("Can't do a 3 way if no doubled digit.")
 
@@ -135,11 +163,15 @@ class Digits(object):
 
 
     def __str__(self):
+        """
+        This class is a fance wrapper around a string version of a number.
+        :return:
+        """
         return self.chosen
 
     def __eq__(self, other):
         """
-
+        Just compare the string value. It is almost a value type.
         :type other: Digits
         :rtype: bool
         """

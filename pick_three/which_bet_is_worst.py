@@ -11,17 +11,12 @@ from pick_three.game import Game
 from pick_three.ticket import BetType, Ticket, ComboType
 
 
-def test_which_is_worst():
+def which_is_worst():
     rounds = 50_000
     for combo in ComboType:
         if combo == ComboType.SIMPLE:
             continue
         game = Game()
-
-        # player = Player()
-
-
-
         winnings = 0
         gambled = 0
 
@@ -89,8 +84,6 @@ def test_which_is_worst():
                      BetType.FRONT_PAIR,
                      BetType.BACK_PAIR]:
         ticket = Ticket(ComboType.SIMPLE)
-        # player = Player()
-
         game = Game()
 
         winnings = 0
@@ -146,5 +139,6 @@ def test_which_is_worst():
                                                                                                      odds))
     print()
 
-# if __name__ == "__main__":
-#     which_is_worst()
+
+if __name__ == "__main__":
+    which_is_worst()

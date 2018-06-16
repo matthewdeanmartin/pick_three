@@ -8,4 +8,3 @@ Same as a player except with deeper pocket and unless it is a fair game, the hou
 class GamingCommission(object):
     def __init__(self):
         self.bank = 0
-

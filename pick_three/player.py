@@ -29,5 +29,3 @@ class Player(object):
         if self.bank > self.strategy.sufficient_win:
             return True
         return False
-
-

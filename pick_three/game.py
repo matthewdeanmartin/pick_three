@@ -26,6 +26,7 @@ class Game(object):
         :type draw: Digits|int
         :return:
         """
+        raise TypeError("Must check BETS not TICKETs OR return a complex value")
         if isinstance(draw, int):
             draw = Digits(draw, ticket.pick)
 

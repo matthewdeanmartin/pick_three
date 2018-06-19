@@ -6,13 +6,14 @@ Which bet type is worst? Straight, front pair, end pair, etc.
 I predict combo bets are worst & straight/front pair/end pair are
 equally least bad.
 """
+from txtble import Txtble
 
 from pick_three.game import Game
 from pick_three.ticket import BetType, Ticket, ComboType
 
 
-def which_is_worst():
-    rounds = 50_000
+def which_is_worst(rounds=100):
+    worst_data = []
     for combo in ComboType:
         if combo == ComboType.SIMPLE:
             continue
@@ -50,7 +51,7 @@ def which_is_worst():
                 win_count += 1
                 prize = 0
                 for bet in ticket.bets:
-                    prize += ticket.payoffs(ticket.state, bet.bet_type)
+                    prize += ticket.payoffs(ticket.state, bet.bet_type, bet.amount)
                 if isinstance(prize, list):
                     winnings += prize[1]
                 else:
@@ -72,12 +73,17 @@ def which_is_worst():
         except ZeroDivisionError:
             odds = "N/A"
 
-        print(
-            "{0}  winnigs : {1} gambled: {2} percent_won: {3} percent by count: {4} odss {5}".format(combo, winnings,
-                                                                                                     gambled,
-                                                                                                     percent_won,
-                                                                                                     percent_by_count,
-                                                                                                     odds))
+        worst_data.append([
+            combo,
+
+            winnings,
+            gambled,
+            gambled - winnings,
+            "{0:.4f}".format(percent_won),
+            "{0:.4f}".format(percent_by_count),
+            "{0:.2f}".format(odds)
+        ])
+
     for bet_type in [BetType.STRAIGHT,
                      BetType.THREE_WAY_BOX,
                      BetType.SIX_WAY_BOX,
@@ -105,11 +111,12 @@ def which_is_worst():
                 gambled += bet.amount
             drawing = game.draw_winner()
 
+
             if game.check_ticket(ticket, drawing):
                 win_count += 1
                 prize = 0
                 for bet in ticket.bets:
-                    prize += ticket.payoffs(ticket.state, bet.bet_type)
+                    prize += ticket.payoffs(ticket.state, bet.bet_type, bet.amount)
                 if isinstance(prize, list):
                     winnings += prize[1]
                 else:
@@ -131,14 +138,24 @@ def which_is_worst():
         except ZeroDivisionError:
             odds = "N/A"
 
-        print(
-            "{0}  winnigs : {1} gambled: {2} percent_won: {3} percent by count: {4} odss {5}".format(bet_type, winnings,
-                                                                                                     gambled,
-                                                                                                     percent_won,
-                                                                                                     percent_by_count,
-                                                                                                     odds))
-    print()
+        worst_data.append([
+            bet_type,
+            winnings,
+            gambled,
+            gambled - winnings,
+            "{0:.4f}".format(percent_won),
+            "{0:.4f}".format(percent_by_count),
+            "{0:.2f}".format(odds)
+        ])
+
+    t = Txtble()
+    t.headers = ["bet type", "winnigs", "gambled", "lost", "percent_won", "percent by count", "odds"]
+
+    for row in worst_data:
+        t.append(row)
+    print(t.show())
 
 
 if __name__ == "__main__":
-    which_is_worst()
+    life_time_of_gambing = 2 * 52 * (82 - 21)
+    which_is_worst(rounds=life_time_of_gambing)

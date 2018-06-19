@@ -17,6 +17,7 @@ semantic-version = "*"
 pytest = "*"
 
 [packages]
+txtble = "*"
 
 [requires]
 python_version = "3.6"

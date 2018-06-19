@@ -253,7 +253,7 @@ class Ticket(object):
         if state == "MD":
             return chart
 
-    def payoffs(self, state, bet_type):
+    def payoffs(self, state, bet_type, amount):
         """
         Payoff chart. Varies by state.
         :type state: str
@@ -273,7 +273,7 @@ class Ticket(object):
             # BetType.STRAIGHT_BOX_SIX_WAY: [290, 40]  # straight/box -- box only
         }
         if state == "MD":
-            return self.chart(state)[bet_type]
+            return self.chart(state)[bet_type] * amount
         else:
             raise TypeError("Haven't implemented game for {0}".format(state))
 

@@ -55,3 +55,8 @@ In New Jersey, the pick 3 prize the prize revenue divided among the winners. So 
 
 - NJ: Parimutuel
 - DC, MD: fixed payouts 
+
+TODO:
+----
+- Implement Dockerized version (pip install from gzip)
+- 

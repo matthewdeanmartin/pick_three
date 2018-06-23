@@ -47,10 +47,11 @@ def which_is_worst(rounds=100):
                 gambled += bet.amount
             drawing = game.draw_winner()
 
-            if game.check_ticket(ticket, drawing):
+            bets_won = game.check_ticket(ticket, drawing)
+            if bets_won :
                 win_count += 1
                 prize = 0
-                for bet in ticket.bets:
+                for bet in bets_won:
                     prize += ticket.payoffs(ticket.state, bet.bet_type, bet.amount)
                 if isinstance(prize, list):
                     winnings += prize[1]

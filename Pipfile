@@ -15,9 +15,12 @@ safety = "*"
 pbr = "*"
 semantic-version = "*"
 pytest = "*"
+mypy = "*"
 
 [packages]
 txtble = "*"
+numpy = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.6"

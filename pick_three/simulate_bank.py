@@ -1,6 +1,13 @@
 # coding=utf-8
+"""
+Someone somewhere suggested that the poor use pick 3 as a sort of self imposed forced savings with
+a big handling fee. In otherwords, pick 3 is a weird bank.
+
+So let's see how it performs.
+"""
 import random
 import statistics
+import numpy as np
 
 from txtble import Txtble
 
@@ -10,15 +17,22 @@ class Bank(object):
     AFAIK, no such bank exist
     """
 
-    def __init__(self, bet, amount, iterations):
+    def __init__(self,
+                 bet, amount, iterations,
+                 include_irr=False,
+                 npv_rate=.01):
         self.actuals = {}
         self.desired = []
         self.iterations = iterations
         self.deposit_amount = bet
         self.withdrawl_amount = amount
         self.stop = 52 * 2 * (82 - 24)
-        self.payout_rate = 1000
+        self.include_irr = include_irr
 
+        if include_irr:
+            self.stop = 400
+        self.payout_rate = 1000
+        self.npv_rate= npv_rate
         self.desired_pattern()
         self.withdraw()
         self.compare_flows()
@@ -79,18 +93,46 @@ class Bank(object):
                     compressed.append((flow_count, value[i]))
 
         t = Txtble()
-        t.headers = ["iteration", "sum", "count", "mean", "stddev"]
-        print(self.actuals)
+        t.headers = ["iteration", "win count", "sum", "count", "mean", "stddev", "npv", "pb period"]
+        if self.include_irr:
+            t.headers.append("irr")
         for key, value in self.actuals.items():
-            row = [key, sum(value), len(value),
+            pay_back_period = self.calculate_pay_back_period(value)
+
+            try:
+                stdev ="{0:.2f}".format(statistics.stdev(value))
+            except statistics.StatisticsError:
+                stdev = "N/A"
+            row = [key,
+                   sum([1 for x in value if x >0]),
+                   sum(value), len(value),
                    "{0:.2f}".format(statistics.mean(value)),
-                   "{0:.2f}".format(statistics.stdev(value))]
+                   stdev,
+                   "{0:.1f}".format(np.npv(self.npv_rate, value)),
+                   pay_back_period
+                   ]
+            if self.include_irr:
+                row.append(round(np.irr(value), 5))
+
             t.append(row)
         print(t.show())
 
         # TODO: need stats library here.
 
+    def calculate_pay_back_period(self, value):
+        pay_back_period = 0
+        net = 0
+        for flow in value:
+            pay_back_period += 1
+            net += flow
+            if net == 0:
+                break
+        return pay_back_period
 
 
 if __name__ == "__main__":
-    bank = Bank(5, 1000, 20)
+    bank = Bank(bet=250,
+                amount=25000,
+                iterations=20,
+                include_irr=True,
+                npv_rate=0.001)

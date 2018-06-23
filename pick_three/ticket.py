@@ -131,6 +131,14 @@ class Ticket(object):
         self.bets = []
 
         self.ticket_ranges = {
+            # VA has split pair (functionally same as front/back)
+            # NY has lucky sum
+            # MA has hybrid pick 4/pick 3 game
+            # MD, VA, DC, DE have idetential payoffs
+            # MA & NJ are some sort of parimuteul
+            # CT payouts same, except w/o rounding on box
+
+            "state": ["MD", "VA", "DC", "NY"],
             "bet_type": [
                 BetType.STRAIGHT,
                 BetType.THREE_WAY_BOX,

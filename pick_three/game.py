@@ -11,6 +11,85 @@ from pick_three.digits_class import Digits
 from pick_three.ticket import BetType
 
 
+class WinLose(object):
+    def __init__(self):
+        self.bets_won = []
+
+
+    def winnings(self):
+        x = 0
+        for bet in self.bets_won:
+            x += bet.amount * payoff
+
+    def pay_off_lookup(self, state, bet_type):
+        chart = {
+            "MD":{
+                BetType.STRAIGHT: 500,  # 1 in 1000
+                BetType.THREE_WAY_BOX: 160,  # 3 in 1000
+                BetType.SIX_WAY_BOX: 80,  # 6? in 1000
+                BetType.FRONT_PAIR: 50,  # 10 in 1000 -- same as pick 2?
+                BetType.BACK_PAIR: 50,  # 10 in 1000 -- same as pick 2?
+            },
+            # DC is same as MD
+            "DC":{
+                BetType.STRAIGHT: 500,  # 1 in 1000
+                BetType.THREE_WAY_BOX: 160,  # 3 in 1000
+                BetType.SIX_WAY_BOX: 80,  # 6? in 1000
+                BetType.FRONT_PAIR: 50,  # 10 in 1000 -- same as pick 2?
+                BetType.BACK_PAIR: 50,  # 10 in 1000 -- same as pick 2?
+            },
+            "VA":{
+                BetType.STRAIGHT: 500,  # 1 in 1000
+                BetType.THREE_WAY_BOX: 160,  # 3 in 1000
+                BetType.SIX_WAY_BOX: 80,  # 6? in 1000
+                BetType.FRONT_PAIR: 50,  # 10 in 1000 -- same as pick 2?
+                BetType.BACK_PAIR: 50,  # 10 in 1000 -- same as pick 2?
+            },
+            "NY": {
+                BetType.STRAIGHT: 500,  # 1 in 1000
+                BetType.THREE_WAY_BOX: 160,  # 3 in 1000
+                BetType.SIX_WAY_BOX: 80,  # 6? in 1000
+                BetType.FRONT_PAIR: 50,  # 10 in 1000 -- same as pick 2?
+                BetType.BACK_PAIR: 50,  # 10 in 1000 -- same as pick 2?
+            },
+        }
+        # NYC variation
+        sum_of_numbers = {
+            0:500,
+            1:166,
+            2:83,
+            3:50,
+            4:33,
+            5:23.50,
+            6:17.50,
+            7:13.50,
+            8:11,
+            9:2,
+            10:7.50,
+            11:7,
+            12:6.5,
+            13:6.50,
+            14:6.50,
+            15:6.50,
+            16:7,
+            17:7.50,
+            18:9,
+            19:11,
+            20:13.50,
+            21:17.50,
+            22:23.50,
+            23:33,
+            24:50,
+            25:83,
+            26:166,
+            27:500
+        }
+        return chart[state][bet_type]
+
+
+
+
+
 class Game(object):
     """
     Represents State Lottery Commision. The House.
@@ -21,12 +100,13 @@ class Game(object):
 
     def check_ticket(self, ticket, draw):
         """
-        Main logic of game.
+        Return complex object which CAN be evaluated as bool, but if you do, you
+        might think all bets won when only some won.
         :type ticket: Ticket
         :type draw: Digits|int
         :return:
         """
-        raise TypeError("Must check BETS not TICKETs OR return a complex value")
+
         if isinstance(draw, int):
             draw = Digits(draw, ticket.pick)
 

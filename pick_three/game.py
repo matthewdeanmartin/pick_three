@@ -8,7 +8,8 @@ Does the drawing, interacts with players, keep track of state's bank account.
 import random
 
 from pick_three.digits_class import Digits
-from pick_three.ticket import BetType
+from pick_three.player import Player
+from pick_three.ticket import BetType, Ticket
 
 
 class WinLose(object):
@@ -16,10 +17,12 @@ class WinLose(object):
         self.bets_won = []
 
 
-    def winnings(self):
-        x = 0
+    def winnings(self, state):
+        won = 0
         for bet in self.bets_won:
-            x += bet.amount * payoff
+            payoff = self.pay_off_lookup(state, bet.bet_type)
+            won += bet.amount * payoff
+        return won
 
     def pay_off_lookup(self, state, bet_type):
         chart = {
@@ -97,6 +100,14 @@ class Game(object):
 
     def __init__(self):
         pass
+
+    def record_play(self, player: Player, ticket:Ticket, winning_number: Digits):
+        winning_bets = self.check_ticket(ticket, winning_number)
+
+        for bet in winning_bets:
+            wl = WinLose()
+            winnings = wl.winnings(ticket.state)
+            player.bank += winnings
 
     def check_ticket(self, ticket, draw):
         """

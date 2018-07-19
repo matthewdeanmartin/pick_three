@@ -37,7 +37,7 @@ pytz==2018.4
 PyYAML==3.12
 requests==2.19.1
 requirements-detector==0.5.2
-safety==1.8.1
+safety==1.8.2
 semantic-version==2.6.0
 setoptconf==0.2.0
 six==1.11.0

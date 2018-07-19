@@ -30,7 +30,7 @@ Pygments==2.2.0
 pylint==1.9.2
 pylint-common==0.2.5
 pylint-plugin-utils==0.2.6
-pynt==0.8.1
+pynt==0.8.2
 pynt-contrib==0.2.0
 pyparsing==2.2.0
 pytz==2018.4

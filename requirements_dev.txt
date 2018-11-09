@@ -35,7 +35,7 @@ pynt-contrib==0.2.0
 pyparsing==2.2.0
 pytz==2018.4
 PyYAML==3.12
-requests==2.19.1
+requests==2.20.1
 requirements-detector==0.5.2
 safety==1.8.1
 semantic-version==2.6.0
